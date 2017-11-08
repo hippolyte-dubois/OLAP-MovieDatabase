@@ -1,8 +1,7 @@
 CREATE TABLE d_zone (
   id NUMBER PRIMARY KEY,
   original_language VARCHAR(2),
-  production_country VARCHAR(2),
-  production_countries_name VARCHAR(24)
+  production_country VARCHAR(2)
 );
 CREATE TABLE d_time (
   id NUMBER PRIMARY KEY,
@@ -14,7 +13,7 @@ CREATE TABLE d_time (
 );
 CREATE TABLE d_genre (
   id NUMBER PRIMARY KEY,
-  genres_name VARCHAR(15),
+  genre_name VARCHAR(15),
   adult NUMBER(1,0)
 );
 CREATE TABLE d_film (
@@ -30,8 +29,7 @@ CREATE TABLE d_film (
 );
 CREATE TABLE d_company (
   id NUMBER PRIMARY KEY,
-  production_companies_id NUMBER,
-  production_companies_name VARCHAR(43)
+  name VARCHAR(43)
 );
 CREATE TABLE fait (
   id NUMBER PRIMARY KEY,
@@ -42,11 +40,18 @@ CREATE TABLE fait (
   runtime NUMBER,
   budget NUMBER,
   vote_average FLOAT,
-  vote_count NUMBER
+  vote_count NUMBER,
+
   -- FOREIGN KEYS
-  -- d_zone_id NUMBER FOREIGN KEY REFERENCES d_zone(id), -- origin
-  -- d_time_id NUMBER FOREIGN KEY REFERENCES d_time(id), -- release date
-  -- d_genre_id NUMBER FOREIGN KEY REFERENCES d_genre(id),
-  -- d_film_id NUMBER FOREIGN KEY REFERENCES d_film(id),
-  -- d_company_id NUMBER FOREIGN KEY REFERENCES d_company(id)
+  d_zone_id NUMBER, -- origin
+  d_time_id NUMBER, -- release date
+  d_genre_id NUMBER,
+  d_film_id NUMBER,
+  d_company_id NUMBER,
+
+  CONSTRAINT fk_d_zone FOREIGN KEY (d_zone_id) REFERENCES d_zone(id),
+  CONSTRAINT fk_d_time FOREIGN KEY (d_time_id) REFERENCES d_time(id),
+  CONSTRAINT fk_d_genre FOREIGN KEY (d_genre_id) REFERENCES d_genre(id),
+  CONSTRAINT fk_d_film FOREIGN KEY (d_film_id) REFERENCES d_film(id),
+  CONSTRAINT fk_d_company FOREIGN KEY (d_company_id) REFERENCES d_company(id)
 );
