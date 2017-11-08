@@ -10,7 +10,7 @@ CREATE OR REPLACE TRIGGER d_zone_on_insert
 BEGIN
   SELECT id_d_zone.nextval
   INTO :new.id
-  FROM d_zone;
+  FROM dual;
 END;
 /
 
@@ -18,7 +18,7 @@ CREATE OR REPLACE TRIGGER d_time_on_insert
 BEFORE INSERT ON d_time
 FOR EACH ROW
 BEGIN
-SELECT id_d_time.nextval INTO :new.id FROM d_time;
+SELECT id_d_time.nextval INTO :new.id FROM dual;
 END;
 /
 
@@ -26,7 +26,7 @@ CREATE OR REPLACE TRIGGER d_film_on_insert
 BEFORE INSERT ON d_film
 FOR EACH ROW
 BEGIN
-SELECT id_d_film.nextval INTO :new.id FROM d_film;
+SELECT id_d_film.nextval INTO :new.id FROM dual;
 END;
 /
 
@@ -34,6 +34,6 @@ CREATE OR REPLACE TRIGGER fait_on_insert
 BEFORE INSERT ON fait
 FOR EACH ROW
 BEGIN
-SELECT id_fait.nextval INTO :new.id FROM fait;
+SELECT id_fait.nextval INTO :new.id FROM dual;
 END;
 /
