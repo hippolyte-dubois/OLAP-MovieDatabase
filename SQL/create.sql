@@ -18,7 +18,7 @@ CREATE TABLE d_time (
 CREATE TABLE d_genre (
   id NUMBER PRIMARY KEY,
   genre_name VARCHAR(15),
-  adult NUMBER(1,0)
+  adult NUMBER(1,0) -- Adult = 1, kid = 0
 );
 CREATE TABLE d_film (
   id NUMBER PRIMARY KEY,
