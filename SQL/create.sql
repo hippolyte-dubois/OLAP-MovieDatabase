@@ -1,3 +1,7 @@
+prompt *************************************************************
+prompt ******************** CREATE TABLE ***************************
+prompt *************************************************************
+
 CREATE TABLE d_zone (
   id NUMBER PRIMARY KEY,
   original_language VARCHAR(2),
@@ -36,7 +40,6 @@ CREATE TABLE fait (
   admissions NUMBER,
   popularity FLOAT,
   revenue NUMBER,
-  release_date VARCHAR(10),
   runtime NUMBER,
   budget NUMBER,
   vote_average FLOAT,
