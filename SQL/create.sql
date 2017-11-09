@@ -1,7 +1,11 @@
+prompt *************************************************************
+prompt ******************** CREATE TABLE ***************************
+prompt *************************************************************
+
 CREATE TABLE d_zone (
   id NUMBER PRIMARY KEY,
   original_language VARCHAR(2),
-  production_country VARCHAR(2)
+  production_country VARCHAR(20)
 );
 CREATE TABLE d_time (
   id NUMBER PRIMARY KEY,
@@ -14,7 +18,7 @@ CREATE TABLE d_time (
 CREATE TABLE d_genre (
   id NUMBER PRIMARY KEY,
   genre_name VARCHAR(15),
-  adult NUMBER(1,0)
+  adult NUMBER(1,0) -- Adult = 1, kid = 0
 );
 CREATE TABLE d_film (
   id NUMBER PRIMARY KEY,
@@ -36,7 +40,6 @@ CREATE TABLE fait (
   admissions NUMBER,
   popularity FLOAT,
   revenue NUMBER,
-  release_date VARCHAR(10),
   runtime NUMBER,
   budget NUMBER,
   vote_average FLOAT,
