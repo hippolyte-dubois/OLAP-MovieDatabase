@@ -24,7 +24,6 @@ CREATE TABLE d_film (
   id NUMBER PRIMARY KEY,
   title VARCHAR(49),
   overview VARCHAR(955),
-  poster_path VARCHAR(32) NULL,
   imdb_id VARCHAR(9),
   original_title VARCHAR(49),
   tagline VARCHAR(136),
