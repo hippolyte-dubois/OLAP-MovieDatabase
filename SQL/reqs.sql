@@ -26,10 +26,10 @@ WHERE f.d_time_id = dt.id and f.d_genre_id = dg.id
 GROUP BY CUBE (dt.year, dg.genre_name);
 
 prompt **** réussite moyenne (entrées, revenu, popularité, vote average) et nombre de films des boites de production, par trimestre
-SELECT dt.season, dt.year, dc.name, AVG(f.admissions), AVG(f.popularity), AVG(f.revenue), AVG(f.vote_average), count(f.id)
+SELECT dt.season, dt.year, dc.name_, AVG(f.admissions), AVG(f.popularity), AVG(f.revenue), AVG(f.vote_average), count(f.id)
 FROM fait f, d_time dt, d_company dc
 WHERE f.d_time_id = dt.id and f.d_company_id = dc.id
-GROUP BY ROLLUP(dc.name, dt.year, dt.season);
+GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
 
 prompt **** nombre de films qui sortent par mois et par genre
 SELECT dt.month, dg.genre_name, count(f.id)

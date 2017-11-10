@@ -3,13 +3,12 @@
 import os, json
 
 fname = "../API/every_movies.json"
-sql_file = open("../SQL/reqs.sql", 'w+')
 seasons_arr = ["WI", "SP", "SU", "FA"]
 
 insert_zone = "INSERT INTO d_zone(id, original_language, production_country) VALUES ({}, {}, {});\n"
-insert_time = "INSERT INTO d_time(id, release_date, month, season, year, decade) VALUES ({}, to_date({} , \'YYYY-MM-DD\'), {}, \'{}\', {}, {});\n"
+insert_time = "INSERT INTO d_time(id, release_date, month, season, year, decade) VALUES ({}, to_date({} , \'YYYY-MM-DD\'), {}, {}, {}, {});\n"
 insert_genre = "INSERT INTO d_genre(id, genre_name, adult) VALUES ({}, \'{}\', {});\n"
-insert_film = "INSERT INTO d_film(id, title, overview, poster_path, imdb_id, original_title, tagline, homepage, status_) VALUES ({}, \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\');\n"
+insert_film = "INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, homepage, status_) VALUES ({}, \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\');\n"
 insert_company = "INSERT INTO d_company(id, name_) VALUES ({}, \'{}\');\n"
 insert_fait = "INSERT INTO fait(id, admissions, popularity, revenue, runtime, budget, vote_average, vote_count, d_zone_id, d_time_id, d_genre_id, d_film_id, d_company_id) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});\n"
 
@@ -33,7 +32,7 @@ if os.path.exists(fname):
             if movie['release_date']:
                 date = "\'" + movie['release_date'] + "\'"
                 month = movie['release_date'].split('-')[1]
-                season = seasons_arr[int(movie['release_date'].split('-')[1]) // 4]
+                season = "\'" + seasons_arr[int(movie['release_date'].split('-')[1]) // 4] + "\'"
                 year = movie['release_date'].split('-')[0]
                 decade = movie['release_date'].split('-')[0][:3] + "0"
             print(insert_time.format(id, date, month, season, year, decade))
@@ -42,13 +41,13 @@ if os.path.exists(fname):
             genre_name = "NULL"
             if movie['genres']:
                 genre_name = movie['genres'][0]['name']
-            adult = "FALSE"
+            adult = "0"
             if movie['adult']:
-                adult = "TRUE"
+                adult = "1"
             print(insert_genre.format(id, genre_name, adult))
 
             # Film insert
-            print(insert_film.format(id, movie['title'], movie['overview'], movie['poster_path'], movie['imdb_id'], movie['original_title'], movie['tagline'], movie['homepage'], movie['status']))
+            print(insert_film.format(id, movie['title'], movie['overview'], movie['imdb_id'], movie['original_title'], movie['tagline'], movie['homepage'], movie['status']))
 
             # Company insert
             company = "NULL"
