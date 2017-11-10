@@ -29,11 +29,11 @@ CREATE TABLE d_film (
   original_title VARCHAR(49),
   tagline VARCHAR(136),
   homepage VARCHAR(138),
-  status VARCHAR(8)
+  status_ VARCHAR(8)
 );
 CREATE TABLE d_company (
   id NUMBER PRIMARY KEY,
-  name VARCHAR(43)
+  name_ VARCHAR(43)
 );
 CREATE TABLE fait (
   id NUMBER PRIMARY KEY,
