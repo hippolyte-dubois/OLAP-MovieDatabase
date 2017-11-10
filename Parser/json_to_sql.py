@@ -8,7 +8,7 @@ seasons_arr = ["WI", "SP", "SU", "FA"]
 insert_zone = "INSERT INTO d_zone(id, original_language, production_country) VALUES ({}, {}, {});\n"
 insert_time = "INSERT INTO d_time(id, release_date, month, season, year, decade) VALUES ({}, to_date({} , \'YYYY-MM-DD\'), {}, {}, {}, {});\n"
 insert_genre = "INSERT INTO d_genre(id, genre_name, adult) VALUES ({}, \'{}\', {});\n"
-insert_film = "INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, homepage, status_) VALUES ({}, \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\');\n"
+insert_film = "INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, status_) VALUES ({}, \'{}\', \'{}\', \'{}\', \'{}\', \'{}\',  \'{}\');\n"
 insert_company = "INSERT INTO d_company(id, name_) VALUES ({}, \'{}\');\n"
 insert_fait = "INSERT INTO fait(id, admissions, popularity, revenue, runtime, budget, vote_average, vote_count, d_zone_id, d_time_id, d_genre_id, d_film_id, d_company_id) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});\n"
 
@@ -47,7 +47,7 @@ if os.path.exists(fname):
             print(insert_genre.format(id, genre_name, adult))
 
             # Film insert
-            print(insert_film.format(id, movie['title'], movie['overview'], movie['imdb_id'], movie['original_title'], movie['tagline'], movie['homepage'], movie['status']))
+            print(insert_film.format(id, movie['title'], movie['overview'], movie['imdb_id'], movie['original_title'], movie['tagline'], movie['status']))
 
             # Company insert
             company = "NULL"

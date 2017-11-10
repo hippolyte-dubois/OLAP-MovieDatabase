@@ -27,7 +27,6 @@ CREATE TABLE d_film (
   imdb_id VARCHAR(9),
   original_title VARCHAR(49),
   tagline VARCHAR(136),
-  homepage VARCHAR(138),
   status_ VARCHAR(8)
 );
 CREATE TABLE d_company (
