@@ -417,4 +417,3 @@ INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, homepa
 INSERT INTO d_company(id, name_) VALUES (34, 'Paramount Pictures');
 
 INSERT INTO fait(id, admissions, popularity, revenue, runtime, budget, vote_average, vote_count, d_zone_id, d_time_id, d_genre_id, d_film_id, d_company_id) VALUES (34, 49739707, 8.0614, 299965036, 100, 20000000, 6.1, 630, 34, 34, 34, 34, 34);
-

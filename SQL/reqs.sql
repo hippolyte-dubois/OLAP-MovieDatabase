@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 prompt *************************************************************
 prompt ********************** REQUESTS *****************************
 prompt *************************************************************
@@ -28,10 +26,10 @@ WHERE f.d_time_id = dt.id and f.d_genre_id = dg.id
 GROUP BY CUBE (dt.year, dg.genre_name);
 
 prompt **** réussite moyenne (entrées, revenu, popularité, vote average) et nombre de films des boites de production, par trimestre
-SELECT dt.season, dt.year, dc.name, AVG(f.admissions), AVG(f.popularity), AVG(f.revenue), AVG(f.vote_average), count(f.id)
+SELECT dt.season, dt.year, dc.name_, AVG(f.admissions), AVG(f.popularity), AVG(f.revenue), AVG(f.vote_average), count(f.id)
 FROM fait f, d_time dt, d_company dc
 WHERE f.d_time_id = dt.id and f.d_company_id = dc.id
-GROUP BY ROLLUP(dc.name, dt.year, dt.season);
+GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
 
 prompt **** nombre de films qui sortent par mois et par genre
 SELECT dt.month, dg.genre_name, count(f.id)
@@ -46,5 +44,9 @@ GROUP BY CUBE(dt.month, dg.genre_name);
 --   WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 0 )kid_budget
 -- WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 1 AND kid_budget.ti.year = ti.year
 -- GROUP BY ti.year;
--- MArche po :(
->>>>>>> Stashed changes
+
+prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
+SELECT zo.production_country ti.month NTILE(5) over(order by sum(fa.revenue) desc)
+FROM fait fa, d_zone zo, d_time ti
+WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
+GROUP BY zo.production_country;
