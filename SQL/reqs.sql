@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 prompt *************************************************************
 prompt ********************** REQUESTS *****************************
 prompt *************************************************************
@@ -46,5 +44,9 @@ GROUP BY CUBE(dt.month, dg.genre_name);
 --   WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 0 )kid_budget
 -- WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 1 AND kid_budget.ti.year = ti.year
 -- GROUP BY ti.year;
--- MArche po :(
->>>>>>> Stashed changes
+
+prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
+SELECT zo.production_country ti.month NTILE(5) over(order by sum(fa.revenue) desc)
+FROM fait fa, d_zone zo, d_time ti
+WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
+GROUP BY zo.production_country;
