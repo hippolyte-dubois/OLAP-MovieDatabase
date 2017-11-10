@@ -11,13 +11,11 @@ FROM fait fa, d_film fi, d_genre ge
 WHERE fa.d_genre_id=ge.id AND fa.d_film_id = fi.id AND ge.adult = 1;
 
 
-prompt ****
-prompt **** Classements des genres qui ont le engendré le plus d entrée
-prompt ****
-SELECT ge.genre_name, fi.title, sum(fa.admissions)
-FROM fait fa, d_genre ge, d_film fi
-WHERE fa.d_genre_id = ge.id AND fa.d_film_id = fi.id
-GROUP BY ROLLUP(ge.genre_name,fi.title);
+prompt **** Affichage des genres produit par les compagnies ainsi que les entrées total engndré par ce genre
+SELECT ge.genre_name, co.name_, sum(fa.admissions) AS "nb_entree"
+FROM fait fa, d_genre ge, d_company co
+WHERE fa.d_genre_id = ge.id AND fa.d_company_id = co.id AND ge.genre_name !='NULL' AND co.name_ !='NULL'
+GROUP BY ROLLUP(ge.genre_name,co.name_);
 
 
 prompt ****
@@ -55,6 +53,7 @@ FROM fait f, d_time dt, d_genre dg
 WHERE f.d_time_id = dt.id and f.d_genre_id = dg.id
 GROUP BY CUBE(dt.month, dg.genre_name);
 
+<<<<<<< HEAD
 
 prompt ****
 prompt **** la rentabilité par genre, par année et par boite
@@ -89,6 +88,16 @@ prompt ****
 prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
 prompt ****
 SELECT zo.production_country ti.month NTILE(5) over(order by sum(fa.revenue) desc)
+=======
+prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
+SELECT zo.production_country, ti.month NTILE(5) over(order by sum(fa.revenue) desc)
+>>>>>>> 14eabced8ccf7fc43c1117e26ffd9adb4dd64be7
 FROM fait fa, d_zone zo, d_time ti
 WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
 GROUP BY zo.production_country;
+
+prompt **** cumul des budget des films francais depuis 2000
+SELECT ti.years, sum(fa.budget), sum(sum(fa.budget)) over(order by ti.years rows unbounded preceding)
+FROM fait fa, d_time, d_zone zo
+WHERE fa.d_time_id = ti.id AND ti.years >= 2000 AND zo.original_language = "fr"
+GROUP BY ti.years;
