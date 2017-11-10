@@ -5,7 +5,7 @@ prompt *************************************************************
 CREATE TABLE d_zone (
   id NUMBER PRIMARY KEY,
   original_language VARCHAR(2),
-  production_country VARCHAR(20)
+  production_country VARCHAR(24)
 );
 CREATE TABLE d_time (
   id NUMBER PRIMARY KEY,
