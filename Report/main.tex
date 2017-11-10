@@ -1,0 +1,85 @@
+\documentclass{report}
+\usepackage{graphicx,parskip,bibunits,appendix,float,todonotes}
+\usepackage[ruled] {algorithm2e}
+\usepackage{url,amsmath,amssymb,fancybox,listings,pdfpages,caption,multicol,datetime,rotating, booktabs,pgfplots, pgfplotstable}
+%\usepackage[usenames,dvipsnames]{color}
+\usepackage[pagebackref=false,pdffitwindow=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{xspace}
+\usepackage[francais]{babel}
+
+%NOTE: The hyperref usepackage should be the last \usepackage!!
+%NOTE: When pagebackref=true an error will appear at the end of compiling. press `q' to ignore
+%NOTE: Referencing Algorithms does not work if this usepackage is before the hyperref include.!!
+%NOTE: This is a comment, ignored when the document is compiled
+%NOTE: The following document configuration settings generally do not need to be modified
+%NOTE: More packages may need to be added to provide additional functionality
+
+\hypersetup{
+    pdftitle    = {OLAP Movie Database Coursework - Report},
+    pdfauthor   = {Dubois-Bellot-Jean},
+    pdfsubject  = {OLAP},
+    pdfkeywords = {olap, database, movie, report, coursework},
+    colorlinks  = true, anchorcolor = blue, filecolor = blue, urlcolor = blue,
+    linkcolor   = colIdentifier,    %NOTE: change (blue) to (colIdentifier) to have links within the document in Black
+    citecolor   = grey,    %NOTE: change (blue) to (colIdentifier) to have citation links within the document in Black
+}
+
+\definecolor{colBackGrnd}{rgb}{1,1,0.8}
+\definecolor{colKeys}{rgb}{0,0,1}
+\definecolor{colIdentifier}{rgb}{0,0,0}
+\definecolor{colComments}{rgb}{0,.5,0}
+\definecolor{colString}{rgb}{0,0,1}
+\definecolor{colWhite}{rgb}{1,1,1}
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+\makeatother
+
+%NOTE: Setup for including program listin
+
+\sloppy %NOTE: To ensure the Right Hand Margin is used (Especially for long URLS)
+%NOTE: END of the document configuration settings
+
+\lstset{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+	numbers=left,
+	tabsize=2,
+	breaklines=true,
+}
+
+\begin{document}
+
+\DeclareGraphicsExtensions{.jpg,.png,.gif,.pdf}
+%NOTE: When inserting Figures if the extension of the graphic file is not provided LaTeX will automatically search
+% for the extensions declared above, in the order declared.
+
+\title{OLAP Movie Database Coursework\\
+        -\\
+        \huge{Report}
+        \vskip1cm
+        X1I1050
+        }
+\vskip2cm
+\author{Roxane Bellot, Hippolyte Dubois, Marvin Jean}
+\date{Novembre 2017}
+
+%\include{intro/abstract}
+%\listofalgorithms   %NOTE: Will generate a list of Algorithms in the Table of Contents Section
+%\lstlistoflistings  %NOTE: Will generate a list of Program Listings in the Table of Contents Section
+
+%NOTE: Include the relative reference for each chapter to be included
+% dividing the thesis file structure into a number of directories aids development
+% format: directoryName/filename (the .tex extension is not required for the filename)
+\maketitle
+\tableofcontents\begin{flushright}
+\end{flushright}
+\include{introduction}
+\include{part1}
+\include{annexe}
+
+\end{document} %NOTE: END of document, nothing after this point
