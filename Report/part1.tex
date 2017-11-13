@@ -47,21 +47,26 @@ WHERE fa.d_genre_id = ge.id
 GROUP BY ROLLUP(ge.genre_name,co.name_);
 \end{lstlisting}
 \subsubsection{Résultat}
-\begin{lstlisting}
-GENRE_NAME	NAME_					     nb_entree
---------------- ------------------------------------------- ----------
-Crime		Televisi??n Espa??ola TVE		       6701026
-Crime							                         6701026
-Drama		El Deseo				                   1617375
-Drama		DreamWorks				                 14143624
-Drama		V??a Digital				               8526951
-Drama		Hotshot Films					             0
-Drama		United Artists				             14871212
-Drama		France 3 Cin??ma				           0
-Drama		P.P. Film Polski				           0
-Drama		Fine Line Features			           6665199
-Drama		Detour Film Production				     921348
-\end{lstlisting}
+\begin{table}[]
+	\centering
+	\texttt{
+	\begin{tabular}{l l l}
+		GENRE\_NAME & NAME_     & nb\_entree \\
+		\hline
+Crime & Televisi??n Espa??ola TVE	& 6701026 \\
+Crime &								& 6701026 \\
+Drama & El Deseo					& 1617375 \\
+Drama & DreamWorks					& 14143624 \\
+Drama & V??a Digital				& 8526951 \\
+Drama & Hotshot Films				& 0 \\
+Drama & United Artists				& 14871212 \\
+Drama & France 3 Cin??ma			& 0 \\
+Drama & P.P. Film Polski			& 0 \\
+Drama & Fine Line Features			& 6665199 \\
+Drama & Detour Film Production		& 921348 \\
+	\end{tabular}}
+\end{table}
+
 
 \subsection{TOP 10 des films qui ont généré le plus de revenu}
 \subsubsection{Requête}
@@ -99,27 +104,30 @@ WHERE f.d_time_id = dt.id
 GROUP BY CUBE (dt.year, dg.genre_name);
 \end{lstlisting}
 \subsubsection{Résultat}
-\begin{lstlisting}
-YEAR        GENRE_NAME	   SUM(F.REVENUE)
----------- --------------- --------------
-		                       0
-			                     3260793431
-		       NULL 					 0
-		       Crime		       40266982
-		       Drama		       514209432
-		       Action		       488181621
-		       Comedy		       37856188
-		       Adventure	     1030743672
-		       Animation		   940335536
-		       Documentary		 0
-		       Science Fiction 209200000
-2000			                 40031879
-2000       Drama		       40031879
-2000       Comedy			     0
+\begin{table}[]
+	\centering
+	\texttt{
+	\begin{tabular}{l l l}
+		YEAR & GENRE\_NAME     & SUM(F.REVENUE)\\
+		\hline
+		& 					& 0 \\
+		& 					& 3260793431 \\
+		& NULL 				& 0 \\
+		& Crime 			& 40266982 \\
+		& Drama 			& 514209432 \\
+		& Action 			& 488181621 \\
+		& Comedy 			& 37856188 \\
+		& Adventure 		& 1030743672 \\
+		& Animation 		& 940335536 \\
+		& Documentary 		& 0 \\
+		& Science Fiction 	& 209200000 \\
+2000	& 					& 40031879 \\
+2000	& Drama 			& 40031879 \\
+2000	& Comedy 			& 0 \\
+	\end{tabular}}
+\end{table}
 
-\end{lstlisting}
-
-\subsection{réussite moyenne (entrées, revenu, popularité, vote moyen) et nombre de films des boites de production, par trimestre}
+\subsection{Réussite moyenne (entrées, revenu, popularité, vote moyen) et nombre de films des boites de production, par trimestre}
 \subsubsection{Requête}
 \begin{lstlisting}
 SELECT dt.season, dt.year, dc.name_, AVG(f.admissions),
@@ -131,22 +139,26 @@ WHERE f.d_time_id = dt.id
 GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
 \end{lstlisting}
 \subsubsection{Résultat}
-\begin{lstlisting}
-SE	 YEAR NAME_					  AVG(F.ADMISSIONS) AVG(F.POPULARITY) AVG(F.REVENUE) AVG(F.VOTE_AVERAGE) COUNT(F.ID)
--- ---------- ------------------------------------------- ----------------- ----------------- -------------- ------------------- -----------
-	 1987 Paramount Pictures				   49739707	       8.0614	   299965036		     6.1	   1
-SP	 1989 Paramount Pictures				   11769827	     9.919992	    70200000		     5.6	   1
-	 1989 Paramount Pictures				   11769827	     9.919992	    70200000		     5.6	   1
-	      Paramount Pictures				 21572331.3	     9.198693	   129666259		   6.375	   4
-WI	 1998 Handmade Films Ltd.				    4702374	     4.880012	    28356188		     7.5	   1
-	 1998 Handmade Films Ltd.				    4702374	     4.880012	    28356188		     7.5	   1
-	      Handmade Films Ltd.				    4702374	     4.880012	    28356188		     7.5	   1
-SU	 2002 Les Films du Losange					  0	     1.735325		   0		     6.8	   1
-	 2002 Les Films du Losange					  0	     1.735325		   0		     6.8	   1
-	      Les Films du Losange					  0	     1.735325		   0		     6.8	   1
-SU	 1998 X-Filme Creative Pool				    1211807	     7.326948	     7267585		     7.2	   1
+\begin{table}[]
+	\centering
+	\texttt{
+	\begin{tabular}{l l l}
+		SE& YEAR& NAME_ & AVG(F.ADMISSIONS)& AVG(F.POPULARITY)& AVG(F.REVENUE)& AVG(F.VOTE_AVERAGE)& COUNT(F.ID)\\
+		\hline
+   &1987 & Paramount Pictures		& 49739707		& 8.0614	& 299965036	& 6.1 	& 1 \\
+SP &1989 & Paramount Pictures		& 11769827		& 9.919992	& 70200000	& 5.6 	& 1 \\
+   &1989 & Paramount Pictures		& 11769827		& 9.919992	& 70200000	& 5.6 	& 1 \\
+   &     & Paramount Pictures		& 21572331.3	& 9.198693	& 129666259	& 6.375 & 4 \\
+WI &1998 & Handmade Films Ltd.		& 4702374		& 4.880012	& 28356188	& 7.5 	& 1 \\
+   &1998 & Handmade Films Ltd.		& 4702374		& 4.880012	& 28356188	& 7.5 	& 1 \\
+   &     & Handmade Films Ltd.		& 4702374		& 4.880012	& 28356188	& 7.5 	& 1 \\
+SU &2002 & Les Films du Losange		& 0				& 1.735325	& 0			& 6.8 	& 1 \\
+   &2002 & Les Films du Losange		& 0				& 1.735325	& 0			& 6.8 	& 1 \\
+   &     & Les Films du Losange		& 0				& 1.735325	& 0			& 6.8 	& 1 \\
+SU &1998 & X-Filme Creative Pool	&1211807		& 7.326948	& 7267585	& 7.2 	& 1 \\
+	\end{tabular}}
+\end{table}
 
-\end{lstlisting}
 
 \subsection{Classement des genre qui engendre un temps moyen a l affiche le plus long}
 \subsubsection{Requête}
@@ -156,28 +168,13 @@ FROM fait fa, d_genre ge
 WHERE fa.d_genre_id = ge.id
 GROUP BY ge.genre_name;
 \end{lstlisting}
+
 \subsubsection{Résultat}
-\begin{lstlisting}
-GENRE_NAME	Moyenne de temps en salle (j)	    Rang
---------------- ----------------------------- ----------
-NULL					  210	       1
-Adventure				  156	       2
-Science Fiction 			119.5	       3
-Drama				   110.076923	       4
-Comedy				   106.666667	       5
-Crime					  106	       6
-Action				   97.3333333	       7
-Documentary				 66.5	       8
-Animation				 60.5	       9
-
-9 rows selected.
-\end{lstlisting}
-
-\begin{table}[H]
+\begin{table}[]
 	\centering
-	\begin{tabular}{| l | l | l |}
-		\hline
-		GENRE\_NAME     & Durée Moyenne en salle (jours & Rang \\
+	\texttt{
+	\begin{tabular}{l l l}
+		GENRE\_NAME     & Durée moyenne en salle & Rang\\
 		\hline
 		NULL            & 210                           & 1  \\
 		Adventure       & 156                           & 2 \\
@@ -188,8 +185,7 @@ Animation				 60.5	       9
 		Action & 97.33 & 7 \\
 		Documentary & 66.5 & 8 \\
 		Animation & 60.5 & 9 \\ 
-		\hline
-	\end{tabular}
+	\end{tabular}}
 \end{table}
 
 \subsection{Cumul des budgets des films francais depuis 2000}
