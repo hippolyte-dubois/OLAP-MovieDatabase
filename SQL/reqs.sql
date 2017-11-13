@@ -71,18 +71,6 @@ FROM fait f, d_company dc, d_time dt, d_genre dg
 WHERE f.d_company_id = dc.id and f.d_time_id = dt.id and f.d_genre_id = dg.id
 GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
 
-
---prompt ****
--- prompt **** difference de budget entre les films pour adultes et pour enfant sur les annéees
--- prompt ****
--- SELECT ge.adult ti.year SUM(fa.budget)-SUM(kid_budget.fa.budget) AS "diff"
--- FROM fait fa, d_genre ge, d_time ti,
--- (SELECT * FROM fait fa, d_genre ge, d_time ti
---   WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 0 )kid_budget
--- WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 1 AND kid_budget.ti.year = ti.year
--- GROUP BY ti.year;
-
-
 prompt ****
 prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
 prompt ****
@@ -92,7 +80,7 @@ WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
 GROUP BY ti.year,zo.production_country;
 
 
-prompt **** cumul des budget des films francais depuis 2000
+prompt **** Cumul des budgets des films francais depuis 2000
 SELECT ti.year, sum(fa.budget) AS, sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding)
 FROM fait fa, d_time ti, d_zone zo
 WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'fr'
