@@ -1,2 +1,15 @@
 .DS_Store
-./Report/*
+Report/Data/
+Report/bu.aux
+Report/conclusion.aux
+Report/introduction.aux
+Report/main.aux
+Report/main.log
+Report/main.out
+Report/main.pdf
+Report/main.synctex.gz
+Report/main.toc
+Report/part1.aux
+Report/part1.log
+Report/part2.aux
+Report/part3.aux

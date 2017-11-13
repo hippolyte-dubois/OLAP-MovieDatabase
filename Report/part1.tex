@@ -1,0 +1,46 @@
+\chapter{Travail réalisé}
+
+\section{Conception}
+Pour démarrer la phase de conception, nous avons suivi la méthodologie donnée en cours :
+\begin{enumerate}
+\item \emph{Définir le système} : le succès des films (nombre d'entrées, bénéfice, notation), afin de pouvoir réaliser un étude sur les propriétés importantes des films. Mettre en évidence les éventuelles caractéristiques qui augmenteraient le succès d’un film. 
+	
+\item \emph{Choisir un grain} : un film.
+Pour analyser le succès nous avons besoin premièrement des propriétés du film, principales données sur lequel nous croiserons nos faits. Nous aurons aussi besoin de la date, pour étudier les dates de sortie et plus généralement les périodes (mois, saison, année, décennie). Nous aurons aussi besoin des critiques et/ou des notes données aux films, qui sont, avec le nombre d’entrées, les critères permettant de déterminer le succès d’un film. Nous aurons aussi une dimension pour les zones géographiques et linguistiques, pour analyser les tendances.
+
+\item \emph{Choisir un fait} : les faits correspondront à ce qui peut varier en fonction du film, le nombres d'entrée et le bénéfice qu’il a généré, la durée pendant laquelle il est resté à l'affiche, le genre, la boite de production. Avec tout ceci, il sera possible de faire différent traitements en fonction des films.
+\end{enumerate} 
+
+\section{Récolte de données}
+
+Nous exploitons des données tirées du dataset du site \url{https://www.themoviedb.org/}, obtenues via des appels sur son \href{https://www.themoviedb.org/documentation/api}{api}. Les appels sont effectués au moyen d'un script Python qui récupère les informations des films référencés par une liste d'ID propres à l'API, puis les compile dans un seul fichier JSON.
+
+Ce fichier JSON est ensuite utilisé pour construire les instructions \emph{INSERT} qui seront éxécutées par Oracle et qui correspondent au modèle de notre base de données.
+
+\section{Requêtes}
+
+\subsection{ICI NOM DE LA REQUÊTE}
+\subsubsection{Requête}
+\begin{lstlisting}
+ICI LE CODE
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+ICI LE RESULTAT
+\end{lstlisting}
+
+\subsection{Affichage des films pour adultes}
+\subsubsection{Requête}
+\begin{lstlisting}
+SELECT fi.title
+FROM fait fa, d_film fi, d_genre ge
+WHERE fa.d_genre_id=ge.id
+AND fa.d_film_id = fi.id
+AND ge.adult = 1;
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+TITLE
+-------------------------------------------------
+Rocco - Perfect Girls 5
+\end{lstlisting}
