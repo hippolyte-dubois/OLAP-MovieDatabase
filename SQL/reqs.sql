@@ -86,16 +86,16 @@ GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
 prompt ****
 prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
 prompt ****
-SELECT zo.production_country, ti.month, NTILE(5) over(order by sum(fa.revenue) desc) AS "group"
+SELECT zo.production_country, ti.year, NTILE(4) over(order by sum(fa.revenue) desc) as "Groupe"
 FROM fait fa, d_zone zo, d_time ti
 WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
-GROUP BY ti.year
+GROUP BY ti.year,zo.production_country;
 
 
 prompt **** cumul des budget des films francais depuis 2000
 SELECT ti.year, sum(fa.budget) AS, sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding)
 FROM fait fa, d_time ti, d_zone zo
-WHERE fa.d_time_id = ti.id AND ti.year >= 2000 AND zo.original_language = 'fr'
+WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'fr'
 GROUP BY ti.year;
 
 prompt **** Classement des genre qui engendre un temps moyen a l affiche le plus long
