@@ -3,13 +3,13 @@
 \section{Conception}
 Pour démarrer la phase de conception, nous avons suivi la méthodologie donnée en cours :
 \begin{enumerate}
-\item \emph{Définir le système} : le succès des films (nombre d'entrées, bénéfice, notation), afin de pouvoir réaliser un étude sur les propriétés importantes des films. Mettre en évidence les éventuelles caractéristiques qui augmenteraient le succès d’un film. 
-	
+\item \emph{Définir le système} : le succès des films (nombre d'entrées, bénéfice, notation), afin de pouvoir réaliser un étude sur les propriétés importantes des films. Mettre en évidence les éventuelles caractéristiques qui augmenteraient le succès d’un film.
+
 \item \emph{Choisir un grain} : un film.
 Pour analyser le succès nous avons besoin premièrement des propriétés du film, principales données sur lequel nous croiserons nos faits. Nous aurons aussi besoin de la date, pour étudier les dates de sortie et plus généralement les périodes (mois, saison, année, décennie). Nous aurons aussi besoin des critiques et/ou des notes données aux films, qui sont, avec le nombre d’entrées, les critères permettant de déterminer le succès d’un film. Nous aurons aussi une dimension pour les zones géographiques et linguistiques, pour analyser les tendances.
 
 \item \emph{Choisir un fait} : les faits correspondront à ce qui peut varier en fonction du film, le nombres d'entrée et le bénéfice qu’il a généré, la durée pendant laquelle il est resté à l'affiche, le genre, la boite de production. Avec tout ceci, il sera possible de faire différent traitements en fonction des films.
-\end{enumerate} 
+\end{enumerate}
 
 \section{Récolte de données}
 
@@ -19,6 +19,135 @@ Ce fichier JSON est ensuite utilisé pour construire les instructions \emph{INSE
 
 \section{Requêtes}
 
+\subsection{Affichage des films pour adultes}
+\subsubsection{Requête}
+\begin{lstlisting}
+SELECT fi.title
+FROM fait fa, d_film fi, d_genre ge
+WHERE fa.d_genre_id=ge.id
+		AND fa.d_film_id = fi.id
+		AND ge.adult = 1;
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+TITLE
+-------------------------------------------------
+Rocco - Perfect Girls 5
+\end{lstlisting}
+
+\subsection{Entées en fonction des compagnies et du genre}
+\subsubsection{Requête}
+\begin{lstlisting}
+SELECT ge.genre_name, co.name_, sum(fa.admissions) AS "nb_entree"
+FROM fait fa, d_genre ge, d_company co
+WHERE fa.d_genre_id = ge.id
+		AND fa.d_company_id = co.id
+		AND ge.genre_name !='NULL'
+		AND co.name_ !='NULL'
+GROUP BY ROLLUP(ge.genre_name,co.name_);
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+GENRE_NAME	NAME_					     nb_entree
+--------------- ------------------------------------------- ----------
+Crime		Televisi??n Espa??ola TVE		       6701026
+Crime							                         6701026
+Drama		El Deseo				                   1617375
+Drama		DreamWorks				                 14143624
+Drama		V??a Digital				               8526951
+Drama		Hotshot Films					             0
+Drama		United Artists				             14871212
+Drama		France 3 Cin??ma				           0
+Drama		P.P. Film Polski				           0
+Drama		Fine Line Features			           6665199
+Drama		Detour Film Production				     921348
+\end{lstlisting}
+
+\subsection{TOP 10 des films qui ont généré le plus de revenu}
+\subsubsection{Requête}
+\begin{lstlisting}
+SELECT fi.title
+FROM d_film fi, fait fa
+WHERE fa.d_film_id = fi.id
+		AND ROWNUM <= 10
+ORDER BY fa.revenue;
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+TITLE
+-------------------------------------------------
+Three Colors: Blue
+Italian for Beginners
+The Rolling Stones: Gimme Shelter
+No End
+Run Lola Run
+Lock, Stock and Two Smoking Barrels
+Match Point
+Princess Mononoke
+The Lord of the Rings: The Fellowship of the Ring
+Finding Nemo
+
+\end{lstlisting}
+
+\subsection{Entrées par genres en fonction de l’année}
+\subsubsection{Requête}
+\begin{lstlisting}
+SELECT dt.year, dg.genre_name, SUM(f.revenue)
+FROM fait f, d_time dt, d_genre dg
+WHERE f.d_time_id = dt.id
+		AND f.d_genre_id = dg.id
+GROUP BY CUBE (dt.year, dg.genre_name);
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+YEAR        GENRE_NAME	   SUM(F.REVENUE)
+---------- --------------- --------------
+		                       0
+			                     3260793431
+		       NULL 					 0
+		       Crime		       40266982
+		       Drama		       514209432
+		       Action		       488181621
+		       Comedy		       37856188
+		       Adventure	     1030743672
+		       Animation		   940335536
+		       Documentary		 0
+		       Science Fiction 209200000
+2000			                 40031879
+2000       Drama		       40031879
+2000       Comedy			     0
+
+\end{lstlisting}
+
+\subsection{réussite moyenne (entrées, revenu, popularité, vote moyen) et nombre de films des boites de production, par trimestre}
+\subsubsection{Requête}
+\begin{lstlisting}
+SELECT dt.season, dt.year, dc.name_, AVG(f.admissions),
+	AVG(f.popularity), AVG(f.revenue), AVG(f.vote_average),
+	count(f.id)
+FROM fait f, d_time dt, d_company dc
+WHERE f.d_time_id = dt.id
+		AND f.d_company_id = dc.id
+GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
+\end{lstlisting}
+\subsubsection{Résultat}
+\begin{lstlisting}
+SE	 YEAR NAME_					  AVG(F.ADMISSIONS) AVG(F.POPULARITY) AVG(F.REVENUE) AVG(F.VOTE_AVERAGE) COUNT(F.ID)
+-- ---------- ------------------------------------------- ----------------- ----------------- -------------- ------------------- -----------
+	 1987 Paramount Pictures				   49739707	       8.0614	   299965036		     6.1	   1
+SP	 1989 Paramount Pictures				   11769827	     9.919992	    70200000		     5.6	   1
+	 1989 Paramount Pictures				   11769827	     9.919992	    70200000		     5.6	   1
+	      Paramount Pictures				 21572331.3	     9.198693	   129666259		   6.375	   4
+WI	 1998 Handmade Films Ltd.				    4702374	     4.880012	    28356188		     7.5	   1
+	 1998 Handmade Films Ltd.				    4702374	     4.880012	    28356188		     7.5	   1
+	      Handmade Films Ltd.				    4702374	     4.880012	    28356188		     7.5	   1
+SU	 2002 Les Films du Losange					  0	     1.735325		   0		     6.8	   1
+	 2002 Les Films du Losange					  0	     1.735325		   0		     6.8	   1
+	      Les Films du Losange					  0	     1.735325		   0		     6.8	   1
+SU	 1998 X-Filme Creative Pool				    1211807	     7.326948	     7267585		     7.2	   1
+
+\end{lstlisting}
+
 \subsection{ICI NOM DE LA REQUÊTE}
 \subsubsection{Requête}
 \begin{lstlisting}
@@ -27,20 +156,4 @@ ICI LE CODE
 \subsubsection{Résultat}
 \begin{lstlisting}
 ICI LE RESULTAT
-\end{lstlisting}
-
-\subsection{Affichage des films pour adultes}
-\subsubsection{Requête}
-\begin{lstlisting}
-SELECT fi.title
-FROM fait fa, d_film fi, d_genre ge
-WHERE fa.d_genre_id=ge.id
-AND fa.d_film_id = fi.id
-AND ge.adult = 1;
-\end{lstlisting}
-\subsubsection{Résultat}
-\begin{lstlisting}
-TITLE
--------------------------------------------------
-Rocco - Perfect Girls 5
 \end{lstlisting}
