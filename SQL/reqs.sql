@@ -55,32 +55,12 @@ GROUP BY CUBE(dt.month, dg.genre_name);
 
 
 prompt ****
-prompt **** la rentabilité par genre, par année et par boite
+prompt **** la rentabilité par genre, par année et par boite de production
 prompt ****
 SELECT dc.name_, dt.year, dg.genre_name, SUM(f.revenue) - SUM(f.budget) as "profit"
 FROM fait f, d_company dc, d_time dt, d_genre dg
-WHERE f.d_company_id = dc.id AND f.d_time_id = dt.id and f.d_genre_id = dg.id
+WHERE f.d_company_id = dc.id AND f.d_time_id = dt.id AND f.d_genre_id = dg.id
 GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
-
-
-prompt ****
-prompt **** la rentabilité par genre, par année et par boite
-prompt ****
-SELECT dc.name_, dt.year, dg.genre_name, SUM(f.revenue) - SUM(f.budget) as "profit"
-FROM fait f, d_company dc, d_time dt, d_genre dg
-WHERE f.d_company_id = dc.id and f.d_time_id = dt.id and f.d_genre_id = dg.id
-GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
-
-
---prompt ****
--- prompt **** difference de budget entre les films pour adultes et pour enfant sur les annéees
--- prompt ****
--- SELECT ge.adult ti.year SUM(fa.budget)-SUM(kid_budget.fa.budget) AS "diff"
--- FROM fait fa, d_genre ge, d_time ti,
--- (SELECT * FROM fait fa, d_genre ge, d_time ti
---   WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 0 )kid_budget
--- WHERE fa.d_genre_id = ge.id AND fa.d_genre_id = ge.id AND ge.adult = 1 AND kid_budget.ti.year = ti.year
--- GROUP BY ti.year;
 
 
 prompt ****
