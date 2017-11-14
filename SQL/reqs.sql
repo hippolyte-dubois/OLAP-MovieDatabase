@@ -11,8 +11,8 @@ FROM fait fa, d_film fi, d_genre ge
 WHERE fa.d_genre_id=ge.id AND fa.d_film_id = fi.id AND ge.adult = 1;
 
 
-prompt **** Entées en fonction des compagnies et du genre
-SELECT ge.genre_name, co.name_, sum(fa.admissions) AS "nb_entree"
+prompt **** Entrées en fonction des compagnies et du genre
+SELECT ge.genre_name, co.name_, sum(fa.admissions) AS "nb_entrees"
 FROM fait fa, d_genre ge, d_company co
 WHERE fa.d_genre_id = ge.id AND fa.d_company_id = co.id AND ge.genre_name !='NULL' AND co.name_ !='NULL'
 GROUP BY ROLLUP(ge.genre_name,co.name_);
@@ -72,7 +72,7 @@ WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
 GROUP BY ti.year,zo.production_country;
 
 
-prompt **** cumul des budget des films francais depuis 2000
+prompt **** Cumul des budgets des films francais depuis 2000
 SELECT ti.year, sum(fa.budget) AS, sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding)
 FROM fait fa, d_time ti, d_zone zo
 WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'fr'
