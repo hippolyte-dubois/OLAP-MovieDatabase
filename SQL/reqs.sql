@@ -21,10 +21,13 @@ GROUP BY ROLLUP(ge.genre_name,co.name_);
 prompt ****
 prompt **** TOP 10 des films qui ont généré le plus de revenu
 prompt ****
-SELECT fi.title
-FROM d_film fi, fait fa
-WHERE fa.d_film_id = fi.id AND ROWNUM <= 10
-ORDER BY fa.revenue;
+SELECT * FROM (
+	SELECT fi.title, fa.revenue
+	FROM d_film fi, fait fa
+	WHERE fa.d_film_id = fi.id
+	ORDER BY fa.revenue DESC
+)
+WHERE ROWNUM <= 10;
 
 
 prompt ****

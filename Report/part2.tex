@@ -126,7 +126,7 @@ WHERE f.d_time_id = dt.id
 		AND f.d_company_id = dc.id
 GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
 \end{lstlisting}
-Ici nous demandons un compte rendu complet de la réussite moyenne des compagnies de production. Chaque indicateur (moyenne des entrées, revenu, popularité, votes) est calculé non seulement pour chaque entreprise, mais aussi pour chaque entreprise pour chaque année (où au moins un film à été produit), et pour chaque année pour chaque saison, grâce au fonctionnement de l'opérateur \texttt{ROLLUP}
+Ici, nous demandons un compte rendu complet de la réussite moyenne des compagnies de production. Chaque indicateur (moyenne des entrées, revenu, popularité, votes) est calculé non seulement pour chaque entreprise, mais aussi pour chaque entreprise pour chaque année (où au moins un film à été produit), et pour chaque année pour chaque saison, grâce au fonctionnement de l'opérateur \texttt{ROLLUP}
 \subsubsection{Résultat}
 \begin{table}[]
 	\centering
