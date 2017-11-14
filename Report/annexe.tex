@@ -1,0 +1,213 @@
+\chapter{Annexe}
+
+\section{Script de récolte des données}
+\subsection{Requêtes à l'API}
+\begin{lstlisting}
+#! /usr/local/bin/python3
+
+import urllib.request
+import urllib.parse
+import json
+
+movies_id = [] # Trop long pour le rapport
+movies_array = []
+api_key = "40d11b52ba315a0c925a73ee719f595d"
+
+for id in movies_id:
+	request = "https://api.themoviedb.org/3/movie/"+ id + "?api_key=" + api_key 
+	print("issuing request: " ,request)
+	
+	results = urllib.request.urlopen(request)
+	file_w = open("./movies/" + id + ".json","w+")
+	file_w.write(results.read().decode("utf-8"))
+	print(results.read().decode("utf-8"))
+	movies_array.append(results.read().decode("utf-8"))
+	file_w.close()
+\end{lstlisting}
+
+\subsection{Compilation des données dans un seul fichier}
+Afin d'avoir des données du nombre d'entrées, nous en générons aléatoirement en se basant sur le chiffre d'affaire du film.
+
+\begin{lstlisting}
+#! /usr/local/bin/python3
+
+import os, json, random
+
+directory_in_str = "/Users/hippolytedubois/Documents/MASTER/M1/BDD/Projet_OLAP/API/movies"
+directory = os.fsencode(directory_in_str)
+
+movies_arr = []
+
+for file in os.listdir(directory):
+	filename = os.fsdecode(file)
+	f = open(directory_in_str + '/' + filename)
+	json_o = json.loads(f.read())
+	json_o["admissions"] = int(json_o["revenue"] / 6 + ((json_o["revenue"] / 500) * (random.random() - 0.5)))
+	movies_arr.append(json_o)
+	f.close()
+
+f = open("every_movies.json","w+")
+f.write(json.dumps(movies_arr, sort_keys=True, indent=4, separators=(',', ': ')))
+f.close()
+\end{lstlisting}
+
+\section{Création de la base de donnée}
+
+\begin{lstlisting}
+CREATE TABLE d_zone (
+	id NUMBER PRIMARY KEY,
+	original_language VARCHAR(2),
+	production_country VARCHAR(24)
+);
+
+CREATE TABLE d_time (
+	id NUMBER PRIMARY KEY,
+	release_date DATE,
+	month NUMBER, -- 01, 02...12
+	season VARCHAR(2), -- FA, WI, SP, SU
+	year NUMBER,
+	decade NUMBER -- 1910, 1920... 2010
+);
+
+CREATE TABLE d_genre (
+	id NUMBER PRIMARY KEY,
+	genre_name VARCHAR(15),
+	adult NUMBER(1,0) -- Adult = 1, kid = 0
+);
+
+CREATE TABLE d_film (
+	id NUMBER PRIMARY KEY,
+	title VARCHAR(49),
+	overview VARCHAR(955),
+	imdb_id VARCHAR(9),
+	original_title VARCHAR(49),
+	tagline VARCHAR(136),
+	status_ VARCHAR(8)
+);
+
+CREATE TABLE d_company (
+	id NUMBER PRIMARY KEY,
+	name_ VARCHAR(43)
+);
+
+CREATE TABLE fait (
+	id NUMBER PRIMARY KEY,
+	admissions NUMBER,
+	popularity FLOAT,
+	revenue NUMBER,
+	runtime NUMBER,
+	budget NUMBER,
+	vote_average FLOAT,
+	vote_count NUMBER,
+	
+	-- FOREIGN KEYS
+	d_zone_id NUMBER, -- origin
+	d_time_id NUMBER, -- release date
+	d_genre_id NUMBER,
+	d_film_id NUMBER,
+	d_company_id NUMBER,
+	
+	CONSTRAINT fk_d_zone FOREIGN KEY (d_zone_id) REFERENCES d_zone(id),
+	CONSTRAINT fk_d_time FOREIGN KEY (d_time_id) REFERENCES d_time(id),
+	CONSTRAINT fk_d_genre FOREIGN KEY (d_genre_id) REFERENCES d_genre(id),
+	CONSTRAINT fk_d_film FOREIGN KEY (d_film_id) REFERENCES d_film(id),
+	CONSTRAINT fk_d_company FOREIGN KEY (d_company_id) REFERENCES d_company(id)
+);
+
+\end{lstlisting}
+
+\subsection{Conversion des données au modèle de la base de donnée }
+Ce script Python génère un fichier d'instructions SQL qui remplit la base de donnée.
+On remplie un fichier au moyen d'une redirection du stdout shell.
+\begin{lstlisting}
+#! /usr/local/bin/python3
+
+import os, json
+
+fname = "../API/every_movies.json"
+seasons_arr = ["WI", "SP", "SU", "FA"]
+
+insert_zone = "INSERT INTO d_zone(id, original_language, production_country) VALUES ({}, {}, {});\n"
+insert_time = "INSERT INTO d_time(id, release_date, month, season, year, decade) VALUES ({}, to_date({} , \'YYYY-MM-DD\'), {}, {}, {}, {});\n"
+insert_genre = "INSERT INTO d_genre(id, genre_name, adult) VALUES ({}, \'{}\', {});\n"
+insert_film = "INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, status_) VALUES ({}, \'{}\', \'{}\', \'{}\', \'{}\', \'{}\',  \'{}\');\n"
+insert_company = "INSERT INTO d_company(id, name_) VALUES ({}, \'{}\');\n"
+insert_fait = "INSERT INTO fait(id, admissions, popularity, revenue, runtime, budget, vote_average, vote_count, d_zone_id, d_time_id, d_genre_id, d_film_id, d_company_id) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});\n"
+
+if os.path.exists(fname):
+with open(fname, 'r') as f:
+json_arr = json.load(f)
+id = 0
+for movie in json_arr:
+# Zone insert
+country = "NULL"
+if movie['production_countries']:
+country = "\'" + movie['production_countries'][0]['name'] + "\'"
+print(insert_zone.format(id, "\'" + movie['original_language'] + "\'", country))
+
+# Date insert
+date = "NULL"
+month = "NULL"
+season = "NULL"
+year = "NULL"
+decade = "NULL"
+if movie['release_date']:
+date = "\'" + movie['release_date'] + "\'"
+month = movie['release_date'].split('-')[1]
+season = "\'" + seasons_arr[int(movie['release_date'].split('-')[1]) // 4] + "\'"
+year = movie['release_date'].split('-')[0]
+decade = movie['release_date'].split('-')[0][:3] + "0"
+print(insert_time.format(id, date, month, season, year, decade))
+
+# Genre insert
+genre_name = "NULL"
+if movie['genres']:
+genre_name = movie['genres'][0]['name']
+adult = "0"
+if movie['adult']:
+adult = "1"
+print(insert_genre.format(id, genre_name, adult))
+
+# Film insert
+print(insert_film.format(id, movie['title'], movie['overview'], movie['imdb_id'], movie['original_title'], movie['tagline'], movie['status']))
+
+# Company insert
+company = "NULL"
+if movie['production_companies']:
+company = movie['production_companies'][0]['name']
+print(insert_company.format(id, company))
+
+# Fact insert
+print(insert_fait.format(id, movie['admissions'], movie['popularity'], movie['revenue'], movie['runtime'], movie['budget'], movie['vote_average'], movie['vote_count'], id, id, id, id, id))
+
+id+=1
+\end{lstlisting}
+
+\subsection{Exemple de commande INSERT ainsi générées}
+
+\begin{lstlisting}
+INSERT INTO d_zone(id, original_language, production_country) VALUES (0, 'en', 'United Kingdom');
+
+INSERT INTO d_time(id, release_date, month, season, year, decade) VALUES (0, to_date('1998-03-05' , 'YYYY-MM-DD'), 03, 'WI', 1998, 1990);
+
+INSERT INTO d_genre(id, genre_name, adult) VALUES (0, 'Comedy', 0);
+
+INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, status_) VALUES (0, 'Lock, Stock and Two Smoking Barrels', 'A card sharp and his unwillingly-enlisted friends need to make a lot of cash quick after losing a sketchy poker match. To do this they decide to pull a heist on a small-time gang who happen to be operating out of the flat next door.', 'tt0120735', 'Lock, Stock and Two Smoking Barrels', 'A Disgrace to Criminals Everywhere.',  'Released');
+
+INSERT INTO d_company(id, name_) VALUES (0, 'Handmade Films Ltd.');
+
+INSERT INTO fait(id, admissions, popularity, revenue, runtime, budget, vote_average, vote_count, d_zone_id, d_time_id, d_genre_id, d_film_id, d_company_id) VALUES (0, 4702374, 4.880012, 28356188, 105, 1350000, 7.5, 1678, 0, 0, 0, 0, 0);
+
+INSERT INTO d_zone(id, original_language, production_country) VALUES (1, 'de', 'Germany');
+
+INSERT INTO d_time(id, release_date, month, season, year, decade) VALUES (1, to_date('1998-08-20' , 'YYYY-MM-DD'), 08, 'SU', 1998, 1990);
+
+INSERT INTO d_genre(id, genre_name, adult) VALUES (1, 'Action', 0);
+
+INSERT INTO d_film(id, title, overview, imdb_id, original_title, tagline, status_) VALUES (1, 'Run Lola Run', 'Lola receives a phone call from her boyfriend Manni. He lost 100,000 DM in a subway train that belongs to a very bad guy. She has 20 minutes to raise this amount and meet Manni. Otherwise, he will rob a store to get the money. Three different alternatives may happen depending on some minor event along Lolas run.', 'tt0130827', 'Lola rennt', 'Every second of every day youre faced with a decision that can change your life.',  'Released');
+
+INSERT INTO d_company(id, name_) VALUES (1, 'X-Filme Creative Pool');
+
+INSERT INTO fait(id, admissions, popularity, revenue, runtime, budget, vote_average, vote_count, d_zone_id, d_time_id, d_genre_id, d_film_id, d_company_id) VALUES (1, 1211807, 7.326948, 7267585, 81, 1530000, 7.2, 678, 1, 1, 1, 1, 1);
+
+\end{lstlisting}

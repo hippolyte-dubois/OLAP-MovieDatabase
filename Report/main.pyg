@@ -1,0 +1,3 @@
+SELECT fi.title
+FROM fait fa, d_film fi, d_genre ge
+WHERE fa.d_genre_id=ge.id AND fa.d_film_id = fi.id AND ge.adult = 0;
