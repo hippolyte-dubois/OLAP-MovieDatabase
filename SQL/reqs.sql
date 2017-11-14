@@ -11,8 +11,8 @@ FROM fait fa, d_film fi, d_genre ge
 WHERE fa.d_genre_id=ge.id AND fa.d_film_id = fi.id AND ge.adult = 1;
 
 
-prompt **** Entées en fonction des compagnies et du genre
-SELECT ge.genre_name, co.name_, sum(fa.admissions) AS "nb_entree"
+prompt **** Entrées en fonction des compagnies et du genre
+SELECT ge.genre_name, co.name_, sum(fa.admissions) AS "nb_entrees"
 FROM fait fa, d_genre ge, d_company co
 WHERE fa.d_genre_id = ge.id AND fa.d_company_id = co.id AND ge.genre_name !='NULL' AND co.name_ !='NULL'
 GROUP BY ROLLUP(ge.genre_name,co.name_);
