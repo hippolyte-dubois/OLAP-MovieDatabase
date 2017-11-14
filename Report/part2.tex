@@ -35,6 +35,7 @@ Donne le total des entrées pour chaque genre pour chaque compagnie de productio
 \subsubsection{Résultat}
 \begin{table}[H]
 	\centering
+	\texttt{
 	\begin{tabular}{ l  l  l }
 		GENRE\_NAME  &  NAME\_      &  nb\_entrees \\
 		\hline
@@ -50,6 +51,7 @@ Drama  &  P.P. Film Polski			 &  0 \\
 Drama  &  Fine Line Features			 &  6665199 \\ 
 Drama  &  Detour Film Production		 &  921348 \\ 
 	\end{tabular}
+}
 \end{table}
 
 
@@ -111,7 +113,8 @@ Cette requête nous permet d'avoir un regard assez complet sur les revenus des f
 2000	 &  					 &  40031879 \\
 2000	 &  Drama 			 &  40031879 \\
 2000	 &  Comedy 			 &  0 \\
-	\end{tabular}}
+	\end{tabular}
+}
 \end{table}
 
 \subsection{Réussite moyenne (entrées, revenu, popularité, vote moyens) et nombre de films des boites de production, par trimestre}
@@ -127,23 +130,27 @@ GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
 \end{lstlisting}
 Ici nous demandons un compte rendu complet de la réussite moyenne des compagnies de production. Chaque indicateur (moyenne des entrées, revenu, popularité, votes) est calculé non seulement pour chaque entreprise, mais aussi pour chaque entreprise pour chaque année (où au moins un film à été produit), et pour chaque année pour chaque saison, grâce au fonctionnement de l'opérateur \texttt{ROLLUP}
 \subsubsection{Résultat}
+
+Certaines colonnes ont été retirées pour rendre le tableau lisible.
 \begin{table}[H]
 	\centering
-	\begin{tabular}{l l l l l l l l}
-		SE  &  YEAR  &  NAME  &  AVG(F.ADMISSIONS)  &  AVG(F.POPULARITY)  &  AVG(F.REVENUE)  &  AVG(F.VOTE\_AVERAGE)  &  COUNT(F.ID)\\
+	\texttt{
+	\begin{tabular}{l l l l l l }
+		Saison  &  Année  &  Production  &  Nombre d'entrées moyen  &  Note moyenne  \\
 		\hline
-    &  1987  &  Paramount Pictures		 &  49739707		 &  8.0614	 &  299965036	 &  6.1 	 &  1 \\
-SP  & 1989  &  Paramount Pictures		 &  11769827		 &  9.919992	 &  70200000	 &  5.6 	 &  1 \\
-    & 1989  &  Paramount Pictures		 &  11769827		 &  9.919992	 &  70200000	 &  5.6 	 &  1 \\
-    &       &  Paramount Pictures		 &  21572331.3	 &  9.198693	 &  129666259	 &  6.375  &  4 \\
-WI  & 1998  &  Handmade Films Ltd.		 &  4702374		 &  4.880012	 &  28356188	 &  7.5 	 &  1 \\
-    & 1998  &  Handmade Films Ltd.		 &  4702374		 &  4.880012	 &  28356188	 &  7.5 	 &  1 \\
-    &       &  Handmade Films Ltd.		 &  4702374		 &  4.880012	 &  28356188	 &  7.5 	 &  1 \\
-SU  & 2002  &  Les Films du Losange		 &  0				 &  1.735325	 &  0			 &  6.8 	 &  1 \\
-    & 2002  &  Les Films du Losange		 &  0				 &  1.735325	 &  0			 &  6.8 	 &  1 \\
-    &       &  Les Films du Losange		 &  0				 &  1.735325	 &  0			 &  6.8 	 &  1 \\
-SU  & 1998  &  X-Filme Creative Pool	 & 1211807		 &  7.326948	 &  7267585	 &  7.2 	 &  1 \\
+    &  1987  &  Paramount Pictures		 &  49739707	 &  6.1 	 \\
+SP  & 1989  &  Paramount Pictures		 &  11769827 &  5.6 	  \\
+    & 1989  &  Paramount Pictures		 &  11769827	&  5.6 	  \\
+    &       &  Paramount Pictures		 &  21572331.3	&  6.375   \\
+WI  & 1998  &  Handmade Films Ltd.		 &  4702374		 &  7.5 	 \\
+    & 1998  &  Handmade Films Ltd.		 &  4702374		 &  7.5  \\
+    &       &  Handmade Films Ltd.		 &  4702374		&  7.5 \\
+SU  & 2002  &  Les Films du Losange		 &  0				&  6.8 	\\
+    & 2002  &  Les Films du Losange		 &  0			&  6.8 	 \\
+    &       &  Les Films du Losange		 &  0		&  6.8 \\
+SU  & 1998  &  X-Filme Creative Pool	 & 1211807		 &  7.2 \\
 	\end{tabular}
+}
 \end{table}
 
 
