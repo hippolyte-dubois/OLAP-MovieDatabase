@@ -90,7 +90,7 @@ WHERE f.d_time_id = dt.id
 		AND f.d_genre_id = dg.id
 GROUP BY CUBE (dt.year, dg.genre_name);
 \end{lstlisting}
-Cette requête nous permet d'avoir un regard assez complet sur les revenus des films, en croisant les genres et les années. Grâce à l'operateur \texttt{CUBE}, nous avons aussi les revenus sur les années tout genres confondus et sur les genres, indépendamment des années. 
+Cette requête nous permet d'avoir un regard assez complet sur les revenus des films, en croisant les genres et les années. Grâce à l'operateur \texttt{CUBE}, nous avons aussi les revenus sur les années tout genres confondus et sur les genres, indépendamment des années.
 \subsubsection{Résultat}
 \begin{table}[]
 	\centering
@@ -149,7 +149,7 @@ SU &1998 & X-Filme Creative Pool	&1211807		& 7.326948	& 7267585	& 7.2 	& 1 \\
 \end{table}
 
 
-\subsection{Classement des genre qui engendre un temps moyen a l affiche le plus long}
+\subsection{Classement des genres qui engendrent un temps moyen a l'affiche le plus long}
 \subsubsection{Requête}
 \begin{lstlisting}
 SELECT ge.genre_name,avg(fa.runtime) AS "Moyenne de temps en salle (j)", rank() over (order by avg(fa.runtime) desc) AS "Rang"
@@ -174,7 +174,7 @@ GROUP BY ge.genre_name;
 		Crime & 106 & 6 \\
 		Action & 97.33 & 7 \\
 		Documentary & 66.5 & 8 \\
-		Animation & 60.5 & 9 \\ 
+		Animation & 60.5 & 9 \\
 		\hline
 	\end{tabular}
 }
