@@ -21,10 +21,13 @@ GROUP BY ROLLUP(ge.genre_name,co.name_);
 prompt ****
 prompt **** TOP 10 des films qui ont généré le plus de revenu
 prompt ****
-SELECT fi.title
-FROM d_film fi, fait fa
-WHERE fa.d_film_id = fi.id AND ROWNUM <= 10
-ORDER BY fa.revenue;
+SELECT * FROM (
+	SELECT fi.title, fa.revenue
+	FROM d_film fi, fait fa
+	WHERE fa.d_film_id = fi.id
+	ORDER BY fa.revenue DESC
+)
+WHERE ROWNUM <= 10;
 
 
 prompt ****
@@ -55,21 +58,13 @@ GROUP BY CUBE(dt.month, dg.genre_name);
 
 
 prompt ****
-prompt **** la rentabilité par genre, par année et par boite
+prompt **** la rentabilité par genre, par année et par boite de production
 prompt ****
 SELECT dc.name_, dt.year, dg.genre_name, SUM(f.revenue) - SUM(f.budget) as "profit"
 FROM fait f, d_company dc, d_time dt, d_genre dg
-WHERE f.d_company_id = dc.id AND f.d_time_id = dt.id and f.d_genre_id = dg.id
+WHERE f.d_company_id = dc.id AND f.d_time_id = dt.id AND f.d_genre_id = dg.id
 GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
 
-
-prompt ****
-prompt **** la rentabilité par genre, par année et par boite
-prompt ****
-SELECT dc.name_, dt.year, dg.genre_name, SUM(f.revenue) - SUM(f.budget) as "profit"
-FROM fait f, d_company dc, d_time dt, d_genre dg
-WHERE f.d_company_id = dc.id and f.d_time_id = dt.id and f.d_genre_id = dg.id
-GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
 
 prompt ****
 prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
@@ -81,12 +76,12 @@ GROUP BY ti.year,zo.production_country;
 
 
 prompt **** Cumul des budgets des films francais depuis 2000
-SELECT ti.year, sum(fa.budget) AS, sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding)
+SELECT ti.year, sum(fa.budget), sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding) as "budget cumulé"
 FROM fait fa, d_time ti, d_zone zo
-WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'fr'
+WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'en'
 GROUP BY ti.year;
 
-prompt **** Classement des genre qui engendre un temps moyen a l affiche le plus long
+prompt **** Classement des genres qui engendrent un temps moyen a l affiche le plus long
 SELECT ge.genre_name,avg(fa.runtime) AS "Moyenne de temps en salle (j)", rank() over (order by avg(fa.runtime) desc) AS "Rang"
 FROM fait fa, d_genre ge
 WHERE fa.d_genre_id = ge.id
