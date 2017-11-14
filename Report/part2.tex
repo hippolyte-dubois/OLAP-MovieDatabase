@@ -33,24 +33,23 @@ GROUP BY ROLLUP(ge.genre_name,co.name_);
 \end{lstlisting}
 Donne le total des entrées pour chaque genre pour chaque compagnie de production, mais aussi pour chaque genre en tout
 \subsubsection{Résultat}
-\begin{table}[]
+\begin{table}[H]
 	\centering
-	\texttt{
-	\begin{tabular}{l l l}
-		GENRE\_NAME & NAME_     & nb\_entrees \\
+	\begin{tabular}{ l  l  l }
+		GENRE\_NAME  &  NAME\_      &  nb\_entrees \\
 		\hline
-Crime & Televisi??n Espa??ola TVE	& 6701026 \\
-Crime &								& 6701026 \\
-Drama & El Deseo					& 1617375 \\
-Drama & DreamWorks					& 14143624 \\
-Drama & V??a Digital				& 8526951 \\
-Drama & Hotshot Films				& 0 \\
-Drama & United Artists				& 14871212 \\
-Drama & France 3 Cin??ma			& 0 \\
-Drama & P.P. Film Polski			& 0 \\
-Drama & Fine Line Features			& 6665199 \\
-Drama & Detour Film Production		& 921348 \\
-	\end{tabular}}
+Crime  &  Televisiõn Española TVE	 &  6701026 \\ 
+Crime  & 								 &  6701026 \\ 
+Drama  &  El Deseo					 &  1617375 \\ 
+Drama  &  DreamWorks					 &  14143624 \\ 
+Drama  &  Véa Digital				 &  8526951 \\ 
+Drama  &  Hotshot Films				 &  0 \\ 
+Drama  &  United Artists				 &  14871212 \\ 
+Drama  &  France 3 Cinéma			 &  0 \\ 
+Drama  &  P.P. Film Polski			 &  0 \\ 
+Drama  &  Fine Line Features			 &  6665199 \\ 
+Drama  &  Detour Film Production		 &  921348 \\ 
+	\end{tabular}
 \end{table}
 
 
@@ -92,26 +91,26 @@ GROUP BY CUBE (dt.year, dg.genre_name);
 \end{lstlisting}
 Cette requête nous permet d'avoir un regard assez complet sur les revenus des films, en croisant les genres et les années. Grâce à l'operateur \texttt{CUBE}, nous avons aussi les revenus sur les années tout genres confondus et sur les genres, indépendamment des années. 
 \subsubsection{Résultat}
-\begin{table}[]
+\begin{table}[H]
 	\centering
 	\texttt{
 	\begin{tabular}{l l l}
-		YEAR & GENRE\_NAME     & SUM(F.REVENUE)\\
+		YEAR  &  GENRE\_NAME      &  SUM(F.REVENUE)\\
 		\hline
-		& 					& 0 \\
-		& 					& 3260793431 \\
-		& NULL 				& 0 \\
-		& Crime 			& 40266982 \\
-		& Drama 			& 514209432 \\
-		& Action 			& 488181621 \\
-		& Comedy 			& 37856188 \\
-		& Adventure 		& 1030743672 \\
-		& Animation 		& 940335536 \\
-		& Documentary 		& 0 \\
-		& Science Fiction 	& 209200000 \\
-2000	& 					& 40031879 \\
-2000	& Drama 			& 40031879 \\
-2000	& Comedy 			& 0 \\
+		 &  					 &  0 \\
+		 &  					 &  3260793431 \\
+		 &  NULL 				 &  0 \\
+		 &  Crime 			 &  40266982 \\
+		 &  Drama 			 &  514209432 \\
+		 &  Action 			 &  488181621 \\
+		 &  Comedy 			 &  37856188 \\
+		 &  Adventure 		 &  1030743672 \\
+		 &  Animation 		 &  940335536 \\
+		 &  Documentary 		 &  0 \\
+		 &  Science Fiction 	 &  209200000 \\
+2000	 &  					 &  40031879 \\
+2000	 &  Drama 			 &  40031879 \\
+2000	 &  Comedy 			 &  0 \\
 	\end{tabular}}
 \end{table}
 
@@ -128,24 +127,23 @@ GROUP BY ROLLUP(dc.name_, dt.year, dt.season);
 \end{lstlisting}
 Ici nous demandons un compte rendu complet de la réussite moyenne des compagnies de production. Chaque indicateur (moyenne des entrées, revenu, popularité, votes) est calculé non seulement pour chaque entreprise, mais aussi pour chaque entreprise pour chaque année (où au moins un film à été produit), et pour chaque année pour chaque saison, grâce au fonctionnement de l'opérateur \texttt{ROLLUP}
 \subsubsection{Résultat}
-\begin{table}[]
+\begin{table}[H]
 	\centering
-	\texttt{
-	\begin{tabular}{l l l}
-		SE& YEAR& NAME_ & AVG(F.ADMISSIONS)& AVG(F.POPULARITY)& AVG(F.REVENUE)& AVG(F.VOTE_AVERAGE)& COUNT(F.ID)\\
+	\begin{tabular}{l l l l l l l l}
+		SE  &  YEAR  &  NAME  &  AVG(F.ADMISSIONS)  &  AVG(F.POPULARITY)  &  AVG(F.REVENUE)  &  AVG(F.VOTE\_AVERAGE)  &  COUNT(F.ID)\\
 		\hline
-   &1987 & Paramount Pictures		& 49739707		& 8.0614	& 299965036	& 6.1 	& 1 \\
-SP &1989 & Paramount Pictures		& 11769827		& 9.919992	& 70200000	& 5.6 	& 1 \\
-   &1989 & Paramount Pictures		& 11769827		& 9.919992	& 70200000	& 5.6 	& 1 \\
-   &     & Paramount Pictures		& 21572331.3	& 9.198693	& 129666259	& 6.375 & 4 \\
-WI &1998 & Handmade Films Ltd.		& 4702374		& 4.880012	& 28356188	& 7.5 	& 1 \\
-   &1998 & Handmade Films Ltd.		& 4702374		& 4.880012	& 28356188	& 7.5 	& 1 \\
-   &     & Handmade Films Ltd.		& 4702374		& 4.880012	& 28356188	& 7.5 	& 1 \\
-SU &2002 & Les Films du Losange		& 0				& 1.735325	& 0			& 6.8 	& 1 \\
-   &2002 & Les Films du Losange		& 0				& 1.735325	& 0			& 6.8 	& 1 \\
-   &     & Les Films du Losange		& 0				& 1.735325	& 0			& 6.8 	& 1 \\
-SU &1998 & X-Filme Creative Pool	&1211807		& 7.326948	& 7267585	& 7.2 	& 1 \\
-	\end{tabular}}
+    &  1987  &  Paramount Pictures		 &  49739707		 &  8.0614	 &  299965036	 &  6.1 	 &  1 \\
+SP  & 1989  &  Paramount Pictures		 &  11769827		 &  9.919992	 &  70200000	 &  5.6 	 &  1 \\
+    & 1989  &  Paramount Pictures		 &  11769827		 &  9.919992	 &  70200000	 &  5.6 	 &  1 \\
+    &       &  Paramount Pictures		 &  21572331.3	 &  9.198693	 &  129666259	 &  6.375  &  4 \\
+WI  & 1998  &  Handmade Films Ltd.		 &  4702374		 &  4.880012	 &  28356188	 &  7.5 	 &  1 \\
+    & 1998  &  Handmade Films Ltd.		 &  4702374		 &  4.880012	 &  28356188	 &  7.5 	 &  1 \\
+    &       &  Handmade Films Ltd.		 &  4702374		 &  4.880012	 &  28356188	 &  7.5 	 &  1 \\
+SU  & 2002  &  Les Films du Losange		 &  0				 &  1.735325	 &  0			 &  6.8 	 &  1 \\
+    & 2002  &  Les Films du Losange		 &  0				 &  1.735325	 &  0			 &  6.8 	 &  1 \\
+    &       &  Les Films du Losange		 &  0				 &  1.735325	 &  0			 &  6.8 	 &  1 \\
+SU  & 1998  &  X-Filme Creative Pool	 & 1211807		 &  7.326948	 &  7267585	 &  7.2 	 &  1 \\
+	\end{tabular}
 \end{table}
 
 
@@ -159,23 +157,21 @@ GROUP BY ge.genre_name;
 \end{lstlisting}
 
 \subsubsection{Résultat}
-\begin{table}[]
+\begin{table}[H]
 	\centering
 	\texttt{
-	\begin{tabular}{| l | l | l |}
+	\begin{tabular}{ l  l  l }
+		GENRE\_NAME      &  Durée Moyenne en salle (en jours)  &  Rang \\
 		\hline
-		GENRE\_NAME     & Durée Moyenne en salle (en jours) & Rang \\
-		\hline
-		NULL            & 210                           & 1  \\
-		Adventure       & 156                           & 2 \\
-		Science Fiction & 119.5                         & 3  \\
-		Drama & 110.07 & 5 \\
-		Comedy & 106.66 & 6 \\
-		Crime & 106 & 6 \\
-		Action & 97.33 & 7 \\
-		Documentary & 66.5 & 8 \\
-		Animation & 60.5 & 9 \\ 
-		\hline
+		NULL             &  210                            &  1  \\
+		Adventure        &  156                            &  2 \\
+		Science Fiction  &  119.5                          &  3  \\
+		Drama  &  110.07  &  5 \\
+		Comedy  &  106.66  &  6 \\
+		Crime  &  106  &  6 \\
+		Action  &  97.33  &  7 \\
+		Documentary  &  66.5  &  8 \\
+		Animation  &  60.5  &  9 \\ 
 	\end{tabular}
 }
 \end{table}
@@ -204,59 +200,22 @@ GROUP BY ti.year,zo.production_country;
 
 \end{lstlisting}
 \subsubsection{Résultat}
-\begin{lstlisting}
-PRODUCTION_COUNTRY	       YEAR	Groupe
------------------------- ---------- ----------
-United States of America       2003	     1
-New Zealand		       2001	     1
-United States of America       1987	     1
-United States of America       1979	     1
-Japan			       1997	     1
-Ireland 		       2005	     1
-United States of America       1989	     1
-Spain			       2002	     1
-Spain			       2004	     2
-Argentina		       2000	     2
-United Kingdom		       1998	     2
-
-PRODUCTION_COUNTRY	       YEAR	Groupe
------------------------- ---------- ----------
-United States of America       2004	     2
-Canada			       2003	     2
-United States of America       1961	     2
-Germany 		       1998	     2
-Austria 		       1995	     2
-Germany 		       1987	     3
-Austria 		       1998	     3
-France			       1993	     3
-Denmark 		       2000	     3
-United States of America       1970	     3
-United Kingdom		       1985	     3
-
-PRODUCTION_COUNTRY	       YEAR	Groupe
------------------------- ---------- ----------
-			       1921	     3
-France			       1896	     3
-Denmark 		       2002	     4
-Poland			       1985	     4
-United States of America       1932	     4
-					     4
-Japan			       1995	     4
-Spain			       2005	     4
-Austria 		       2006	     4
-			       1938	     4
-
-32 rows selected.
-
-\end{lstlisting}
-
 \begin{table}[H]
 	\centering
 	\texttt{
-	\begin{tabular}{| l | l | l |}
-		\hline
-		PRODU & 1 & 1 \\
-		\hline
+	\begin{tabular}{l l l}
+		PRODUCTION\_COUNTRY  &  YEAR  &  Groupe \\ \hline
+		United States of America  &  2003  &  1 \\ 
+		New Zealand  &  2001  &  1 \\ 
+		United States of America  &  1987  &  1 \\ 
+		United States of America  &  1979  &  1 \\ 
+		Japan  &  1997  &  1 \\ 
+		Ireland  &  2005  &  1 \\ 
+		United States of America  &  1989  &  1 \\ 
+		Spain  &  2002  &  1 \\ 
+		Spain  &  2004  &  2 \\ 
+		Argentina  &  2000  &  2 \\ 
+		United Kingdom  &  1998  &  2 \\ 
 	\end{tabular}
 }
 \end{table}
