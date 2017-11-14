@@ -31,7 +31,8 @@ WHERE fa.d_genre_id = ge.id
 		AND co.name_ !='NULL'
 GROUP BY ROLLUP(ge.genre_name,co.name_);
 \end{lstlisting}
-Donne le total des entrées pour chaque genre pour chaque compagnie de production, mais aussi pour chaque genre en tout
+Donne le total des entrées pour chaque genre pour chaque compagnie de production, mais aussi pour chaque genre en tout.
+Les résultats NULL ne nous intéressant pas nous les avons exclu ici pour l'exemple, mais comme nous ne traitons pas les données nous avons négligé de le faire systématiquement
 \subsubsection{Résultat}
 \begin{table}[]
 	\centering
@@ -57,11 +58,14 @@ Drama & Detour Film Production		& 921348 \\
 \subsection{TOP 10 des films qui ont généré le plus de revenu}
 \subsubsection{Requête}
 \begin{lstlisting}
-SELECT fi.title
-FROM d_film fi, fait fa
-WHERE fa.d_film_id = fi.id
-		AND ROWNUM <= 10
-ORDER BY fa.revenue;
+
+SELECT * FROM (
+	SELECT fi.title, fa.revenue
+	FROM d_film fi, fait fa
+	WHERE fa.d_film_id = fi.id
+	ORDER BY fa.revenue DESC
+)
+WHERE ROWNUM <= 10;
 \end{lstlisting}
 
 \subsubsection{Résultat}
@@ -90,7 +94,7 @@ WHERE f.d_time_id = dt.id
 		AND f.d_genre_id = dg.id
 GROUP BY CUBE (dt.year, dg.genre_name);
 \end{lstlisting}
-Cette requête nous permet d'avoir un regard assez complet sur les revenus des films, en croisant les genres et les années. Grâce à l'operateur \texttt{CUBE}, nous avons aussi les revenus sur les années tout genres confondus et sur les genres, indépendamment des années. 
+Cette requête nous permet d'avoir un regard assez complet sur les revenus des films, en croisant les genres et les années. Grâce à l'operateur \texttt{CUBE}, nous avons aussi les revenus sur les années tout genres confondus et sur les genres, indépendamment des années.
 \subsubsection{Résultat}
 \begin{table}[]
 	\centering
@@ -174,7 +178,7 @@ GROUP BY ge.genre_name;
 		Crime & 106 & 6 \\
 		Action & 97.33 & 7 \\
 		Documentary & 66.5 & 8 \\
-		Animation & 60.5 & 9 \\ 
+		Animation & 60.5 & 9 \\
 		\hline
 	\end{tabular}
 }
