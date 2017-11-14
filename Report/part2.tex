@@ -162,7 +162,7 @@ FROM fait fa, d_genre ge
 WHERE fa.d_genre_id = ge.id
 GROUP BY ge.genre_name;
 \end{lstlisting}
-
+Cette requête utilise \texttt{rank() over}, qui fournit une numérotation correspondant à un classement.
 \subsubsection{Résultat}
 \begin{table}[]
 	\centering
@@ -174,8 +174,8 @@ GROUP BY ge.genre_name;
 		NULL            & 210                           & 1  \\
 		Adventure       & 156                           & 2 \\
 		Science Fiction & 119.5                         & 3  \\
-		Drama & 110.07 & 5 \\
-		Comedy & 106.66 & 6 \\
+		Drama & 110.07 & 4 \\
+		Comedy & 106.66 & 5 \\
 		Crime & 106 & 6 \\
 		Action & 97.33 & 7 \\
 		Documentary & 66.5 & 8 \\
@@ -193,6 +193,7 @@ FROM fait fa, d_time ti, d_zone zo
 WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'fr'
 GROUP BY ti.year;
 \end{lstlisting}
+On note ici l'utilisation d'une fenêtre glissante pour voir progressivement l'accumulation totale du budget investi dans l'industrie cinématographique au cours du temps.
 \subsubsection{Résultat}
 \begin{lstlisting}
 no rows selected
@@ -208,6 +209,7 @@ WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
 GROUP BY ti.year,zo.production_country;
 
 \end{lstlisting}
+Pour finir, une division en quatre parties avec \texttt{NTILE(4)} des pays proposant les films les plus rentables.
 \subsubsection{Résultat}
 \begin{lstlisting}
 PRODUCTION_COUNTRY	       YEAR	Groupe
