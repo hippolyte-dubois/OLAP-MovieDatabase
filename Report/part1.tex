@@ -181,8 +181,9 @@ GROUP BY ge.genre_name;
 \begin{table}[]
 	\centering
 	\texttt{
-	\begin{tabular}{l l l}
-		GENRE\_NAME     & Durée moyenne en salle & Rang\\
+	\begin{tabular}{| l | l | l |}
+		\hline
+		GENRE\_NAME     & Durée Moyenne en salle (en jours) & Rang \\
 		\hline
 		NULL            & 210                           & 1  \\
 		Adventure       & 156                           & 2 \\
@@ -193,7 +194,9 @@ GROUP BY ge.genre_name;
 		Action & 97.33 & 7 \\
 		Documentary & 66.5 & 8 \\
 		Animation & 60.5 & 9 \\ 
-	\end{tabular}}
+		\hline
+	\end{tabular}
+}
 \end{table}
 
 \subsection{Cumul des budgets des films francais depuis 2000}
@@ -265,3 +268,14 @@ Austria 		       2006	     4
 32 rows selected.
 
 \end{lstlisting}
+
+\begin{table}[H]
+	\centering
+	\texttt{
+	\begin{tabular}{| l | l | l |}
+		\hline
+		PRODU & 1 & 1 \\
+		\hline
+	\end{tabular}
+}
+\end{table}
