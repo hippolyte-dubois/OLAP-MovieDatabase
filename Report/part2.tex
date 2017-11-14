@@ -31,7 +31,7 @@ WHERE fa.d_genre_id = ge.id
 		AND co.name_ !='NULL'
 GROUP BY ROLLUP(ge.genre_name,co.name_);
 \end{lstlisting}
-Donne le total des entrées pour chaque genre pour chaque compagnie de production, mais aussi pour chaque genre en tout
+Donne le total des entrées pour chaque genre pour chaque compagnie de production, mais aussi pour chaque genre en tout.
 \subsubsection{Résultat}
 \begin{table}[]
 	\centering
