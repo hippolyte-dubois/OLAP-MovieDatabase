@@ -39,17 +39,17 @@ Donne le total des entrées pour chaque genre pour chaque compagnie de productio
 	\begin{tabular}{ l  l  l }
 		GENRE\_NAME  &  NAME\_      &  nb\_entrees \\
 		\hline
-Crime  &  Televisiõn Española TVE	 &  6701026 \\ 
-Crime  & 								 &  6701026 \\ 
-Drama  &  El Deseo					 &  1617375 \\ 
-Drama  &  DreamWorks					 &  14143624 \\ 
-Drama  &  Véa Digital				 &  8526951 \\ 
-Drama  &  Hotshot Films				 &  0 \\ 
-Drama  &  United Artists				 &  14871212 \\ 
-Drama  &  France 3 Cinéma			 &  0 \\ 
-Drama  &  P.P. Film Polski			 &  0 \\ 
-Drama  &  Fine Line Features			 &  6665199 \\ 
-Drama  &  Detour Film Production		 &  921348 \\ 
+Crime  &  Televisiõn Española TVE	 &  6701026 \\
+Crime  & 								 &  6701026 \\
+Drama  &  El Deseo					 &  1617375 \\
+Drama  &  DreamWorks					 &  14143624 \\
+Drama  &  Véa Digital				 &  8526951 \\
+Drama  &  Hotshot Films				 &  0 \\
+Drama  &  United Artists				 &  14871212 \\
+Drama  &  France 3 Cinéma			 &  0 \\
+Drama  &  P.P. Film Polski			 &  0 \\
+Drama  &  Fine Line Features			 &  6665199 \\
+Drama  &  Detour Film Production		 &  921348 \\
 	\end{tabular}
 }
 \end{table}
@@ -185,28 +185,42 @@ Cette requête utilise \texttt{rank() over}, qui fournit une numérotation corre
 }
 \end{table}
 
-\subsection{Cumul des budgets des films francais depuis 2000}
+\subsection{Cumul des budgets des films anglophones depuis 2000}
 \subsubsection{Requête}
 \begin{lstlisting}
 SELECT ti.year, sum(fa.budget) AS, sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding)
 FROM fait fa, d_time ti, d_zone zo
-WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'fr'
+WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'en'
 GROUP BY ti.year;
 \end{lstlisting}
-On note ici l'utilisation d'une fenêtre glissante pour voir progressivement l'accumulation totale du budget investi dans l'industrie cinématographique au cours du temps.
+On note ici l'utilisation d'une fenêtre glissante pour voir progressivement l'accumulation totale du budget investi dans l'industrie cinématographique au cours des années.
 \subsubsection{Résultat}
 \begin{lstlisting}
-no rows selected
+\begin{table}[]
+	\centering
+	\texttt{
+	\begin{tabular}{l l l}
+	YEAR & SUM(FA.BUDGET) & budget cumul?? \\ \hline
+	2000 & 12800000 & 12800000 \\
+	2001 & 93000000 & 105800000 \\
+	2003 & 124000000 & 229800000 \\
+	2004 & 2700000 & 232500000 \\
+	2005 & 20000000 & 252500000 \\
+	2006 & 42000 & 252542000 \\
+
+	\end{tabular}
+}
+\end{table}
 
 \end{lstlisting}
 
-\subsection{Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films}
+\subsection{Categorisation des pays où sont produit les films générant le plus de revenus avec leur films}
 \subsubsection{Requête}
 \begin{lstlisting}
-SELECT zo.production_country, ti.year, NTILE(4) over(order by sum(fa.revenue) desc) as "Groupe"
-FROM fait fa, d_zone zo, d_time ti
-WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
-GROUP BY ti.year,zo.production_country;
+SELECT zo.production_country, NTILE(4) over(order by sum(fa.revenue) desc) as "Groupe"
+FROM fait fa, d_zone zo
+WHERE fa.d_zone_id = zo.id
+GROUP BY zo.production_country;
 
 \end{lstlisting}
 Pour finir, une division en quatre parties avec \texttt{NTILE(4)} des pays proposant les films les plus rentables.
@@ -215,19 +229,22 @@ Pour finir, une division en quatre parties avec \texttt{NTILE(4)} des pays propo
 \begin{table}[H]
 	\centering
 	\texttt{
-	\begin{tabular}{l l l}
-		PRODUCTION\_COUNTRY  &  YEAR  &  Groupe \\ \hline
-		United States of America  &  2003  &  1 \\ 
-		New Zealand  &  2001  &  1 \\ 
-		United States of America  &  1987  &  1 \\ 
-		United States of America  &  1979  &  1 \\ 
-		Japan  &  1997  &  1 \\ 
-		Ireland  &  2005  &  1 \\ 
-		United States of America  &  1989  &  1 \\ 
-		Spain  &  2002  &  1 \\ 
-		Spain  &  2004  &  2 \\ 
-		Argentina  &  2000  &  2 \\ 
-		United Kingdom  &  1998  &  2 \\
+	\begin{tabular}{l l}
+		PRODUCTION\_COUNTRY  &  Groupe \\ \hline
+		United States of America & 1 \\
+		New Zealand & 1 \\
+		Japan & 1 \\
+		Spain & 1 \\
+		Ireland & 2 \\
+		Argentina & 2 \\
+		United Kingdom & 2 \\
+		Germany & 2 \\
+		Canada & 3 \\
+		Austria & 3 \\
+		Denmark & 3 \\ & 4 \\
+		Poland & 4 \\
+		France & 4 \\
+
 	\end{tabular}
 }
 \end{table}

@@ -67,15 +67,15 @@ GROUP BY GROUPING SETS((dc.name_, dt.year, dg.genre_name), dc.name_);
 
 
 prompt ****
-prompt **** Categorisation des pays où sont produit les films generant le plus de revenu par an avec leur films
+prompt **** Categorisation des pays où sont produit les films generant le plus de revenus avec leur films
 prompt ****
-SELECT zo.production_country, ti.year, NTILE(4) over(order by sum(fa.revenue) desc) as "Groupe"
-FROM fait fa, d_zone zo, d_time ti
-WHERE fa.d_zone_id = zo.id AND fa.d_time_id = ti.id
-GROUP BY ti.year,zo.production_country;
+SELECT zo.production_country, NTILE(4) over(order by sum(fa.revenue) desc) as "Groupe"
+FROM fait fa, d_zone zo
+WHERE fa.d_zone_id = zo.id
+GROUP BY zo.production_country;
 
 
-prompt **** Cumul des budgets des films francais depuis 2000
+prompt **** Cumul des budgets des films anglophones depuis 2000
 SELECT ti.year, sum(fa.budget), sum(sum(fa.budget)) over(order by ti.year rows unbounded preceding) as "budget cumulé"
 FROM fait fa, d_time ti, d_zone zo
 WHERE fa.d_time_id = ti.id AND fa.d_zone_id = zo.id AND ti.year >= 2000 AND zo.original_language = 'en'
